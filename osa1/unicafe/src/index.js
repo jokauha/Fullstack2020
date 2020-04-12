@@ -32,10 +32,29 @@ const Statistics = ({ good, neutral, bad }) => {
 const StatisticLine = ({ text, value }) => {
   if (text === "positive") {
     return (
-      <p>{text} {value} %</p>
+      <table>
+        <tbody>
+          <tr>
+            <td>{text}</td>
+            <td>{value}</td>
+            <td>%</td>
+          </tr>
+        </tbody>
+      </table>
     )
   }
-  else return <p>{text} {value}</p>
+  else {
+    return (
+      <table>
+        <tbody>
+          <tr>
+            <td>{text}</td>
+            <td>{value}</td>
+          </tr>
+        </tbody>
+      </table>
+    )
+  }
 }
 
 const App = () => {
