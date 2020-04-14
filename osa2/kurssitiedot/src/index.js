@@ -1,28 +1,28 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 
-const Course = (props) => {
+const Course = ({ course }) => {
   return (
     <div>
-      <Header course={props.course.name} />
-      <Content course={props.course} />
-      <Total course={props.course} />
+      <Header course={course.name} />
+      <Content course={course} />
+      <Total course={course} />
     </div>
   )
 }
 
-const Header = (props) => {
+const Header = ({ course }) => {
   return (
     <div>
-      <h1>{props.course}</h1>
+      <h2>{course}</h2>
     </div>
   )
 }
 
-const Content = (props) => {
+const Content = ({ course }) => {
   return (
     <div>
-      {props.course.parts.map(part => 
+      {course.parts.map(part => 
         <Part part={part} key={part.id} />
       )}
     </div>
@@ -37,8 +37,8 @@ const Part = ({ part }) => {
   )
 }
 
-const Total = (props) => {
-  const exercises = props.course.parts.map(part => part.exercises)
+const Total = ({ course }) => {
+  const exercises = course.parts.map(part => part.exercises)
   const total = exercises.reduce( ( accumulator, currentValue ) => accumulator + currentValue)
   return (
     <div>
@@ -48,33 +48,60 @@ const Total = (props) => {
 }
 
 const App = () => {
-  const course = {
-    name: 'Half Stack application development',
-    id: 1,
-    parts: [
-      {
-        name: 'Fundamentals of React',
-        exercises: 10,
-        id: 1
-      },
-      {
-        name: 'Using props to pass data',
-        exercises: 7,
-        id: 2
-      },
-      {
-        name: 'State of a component',
-        exercises: 14,
-        id: 3
-      }
-    ]
-  }
+  const courses = [
+    {
+      name: 'Half Stack application development',
+      id: 1,
+      parts: [
+        {
+          name: 'Fundamentals of React',
+          exercises: 10,
+          id: 1
+        },
+        {
+          name: 'Using props to pass data',
+          exercises: 7,
+          id: 2
+        },
+        {
+          name: 'State of a component',
+          exercises: 14,
+          id: 3
+        },
+        {
+          name: 'Redux',
+          exercises: 11,
+          id: 4
+        }
+      ]
+    }, 
+    {
+      name: 'Node.js',
+      id: 2,
+      parts: [
+        {
+          name: 'Routing',
+          exercises: 3,
+          id: 1
+        },
+        {
+          name: 'Middlewares',
+          exercises: 7,
+          id: 2
+        }
+      ]
+    }
+  ]
 
   return (
     <div>
-      <Course course={course} />
+      <h1>Web development curriculum</h1>
+      {courses.map((course, id) => 
+      <Course course={course} key={id} />
+      )}
     </div>
   )
 }
+
 
 ReactDOM.render(<App />, document.getElementById('root'))
