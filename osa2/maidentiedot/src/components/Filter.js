@@ -1,7 +1,7 @@
 import React from 'react'
 
 const Filter = ({ searchCountry, handleCountrySearch }) => {
-    
+
     return (
         <form>
             <div>

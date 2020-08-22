@@ -5,7 +5,7 @@ import Filter from './components/Filter'
 import Country from './components/Country'
 
 const App = () => {
-  
+
  const [ allCountries, setAllCountries ] = useState([])
  const [ searchCountry, setSearchCountry ] = useState('')
  const [ showCountries, setShowCountries ] = useState([])
@@ -39,14 +39,17 @@ const App = () => {
     //console.log({showCountries})
   }
 
+  const handleShowButton = (props) => {
+    setShowCountries(props)
+  }
+
   return (
     <div>
       <Filter searchCountry={searchCountry} handleCountrySearch={handleCountrySearch} />
 
-      <Countries showCountries={showCountries} filter={searchCountry} Country={Country}/>
+      <Countries showCountries={showCountries} filter={searchCountry} Country={Country} handleShowButton={handleShowButton}/>
     </div>
   )
-  
 }
 
 export default App;
