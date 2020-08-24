@@ -30,7 +30,7 @@ const App = () => {
   const addName = (event) => {
     event.preventDefault()
     const result = persons.find( ({ name }) => name.toLowerCase() === newName.toLowerCase())
-    
+
     if(result!==undefined) {
       window.alert(`${newName} is already added to phonebook`)
     }
@@ -40,9 +40,13 @@ const App = () => {
         number: newNumber
       }
 
-      setPersons(persons.concat(personObject))
-      setNewName('')
-      setNewNumber('')
+      axios
+        .post('http://localhost:3001/persons', personObject)
+        .then(response => {
+          setPersons(persons.concat(personObject))
+          setNewName('')
+          setNewNumber('')
+        })
     }
   }
 
@@ -63,15 +67,15 @@ const App = () => {
       <h2>Phonebook</h2>
 
       <Filter searchName={searchName} handleNameSearch={handleNameSearch}/>
-      
+
       <h3>Add a new</h3>
-      
+
       <PersonForm addName={addName} newName={newName} handleNameChange={handleNameChange} newNumber={newNumber} handleNumberChange={handleNumberChange} />
-      
+
       <h3>Numbers</h3>
 
       <Persons persons={persons} searchName={searchName} Person={Person}/>
-      
+
     </div>
   )
 
