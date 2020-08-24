@@ -32,7 +32,16 @@ const App = () => {
     const result = persons.find( ({ name }) => name.toLowerCase() === newName.toLowerCase())
 
     if(result!==undefined) {
-      window.alert(`${newName} is already added to phonebook`)
+      if(window.confirm(newName + " is already added to phonebook, replace the old number with a new one?")) {
+        const person = persons.find(n => n.id === result.id)
+        const updatedPerson = { ...person, number: newNumber}
+
+        personService
+          .update(result.id, updatedPerson)
+          .then(returnedPerson => {
+            setPersons(persons.map(person => person.id !== result.id ? person : returnedPerson))
+          })
+      }
     }
     else {
       const personObject = {
@@ -63,7 +72,7 @@ const App = () => {
   }
 
   const deletePerson = (id, name) => {
-    if(window.confirm("Delete " + name)) {
+    if(window.confirm("Delete " + name + "?")) {
       personService
         .exterminate(id)
         .then(returnedPerson => {
@@ -80,7 +89,13 @@ const App = () => {
 
       <h3>Add a new</h3>
 
-      <PersonForm addName={addName} newName={newName} handleNameChange={handleNameChange} newNumber={newNumber} handleNumberChange={handleNumberChange} />
+      <PersonForm
+        addName={addName}
+        newName={newName}
+        handleNameChange={handleNameChange}
+        newNumber={newNumber}
+        handleNumberChange={handleNumberChange}
+      />
 
       <h3>Numbers</h3>
 
