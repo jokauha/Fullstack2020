@@ -62,6 +62,16 @@ const App = () => {
     setSearchName(event.target.value)
   }
 
+  const deletePerson = (id, name) => {
+    if(window.confirm("Delete " + name)) {
+      personService
+        .exterminate(id)
+        .then(returnedPerson => {
+          setPersons(persons.filter(n => n.id !== id))
+      })
+    }
+  }
+
   return (
     <div>
       <h2>Phonebook</h2>
@@ -74,7 +84,7 @@ const App = () => {
 
       <h3>Numbers</h3>
 
-      <Persons persons={persons} searchName={searchName} Person={Person}/>
+      <Persons persons={persons} searchName={searchName} Person={Person} deletePerson={deletePerson}/>
 
     </div>
   )

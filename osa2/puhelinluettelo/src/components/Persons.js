@@ -1,17 +1,15 @@
 import React from 'react'
 
-const Persons = ({ persons, searchName, Person}) => {
+const Persons = ({ persons, searchName, Person, deletePerson }) => {
 
     return (
 
         <ul>
-            {persons.map((person) => {
-            if(person.name.toLowerCase().includes(searchName.toLowerCase())) {
-                return  <Person key={person.name} person={person} />
+            {persons.filter(person => person.name.toLowerCase().includes(searchName.toLowerCase()))
+                .map(shownPerson => {
+                    return  <Person key={shownPerson.name} person={shownPerson} exterminatePerson={() => deletePerson(shownPerson.id, shownPerson.name)} />
+                })
             }
-            else return void 0
-            }    
-            )}
         </ul>
 
     )
