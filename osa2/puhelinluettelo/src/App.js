@@ -4,6 +4,7 @@ import Person from './components/Person'
 import Persons from './components/Persons'
 import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
+import Notification from './components/Notification'
 
 const App = () => {
 
@@ -18,6 +19,7 @@ const App = () => {
   const [ newName, setNewName ] = useState('')
   const [ newNumber, setNewNumber ] = useState('')
   const [ searchName, setSearchName ] = useState('')
+  const [ notificationMessage, setNotificationMessage ] = useState(null)
 
   useEffect(() => {
     personService
@@ -41,6 +43,12 @@ const App = () => {
           .then(returnedPerson => {
             setPersons(persons.map(person => person.id !== result.id ? person : returnedPerson))
           })
+        setNotificationMessage(
+          `The number for ${updatedPerson.name} was updated.`
+        )
+        setTimeout(() => {
+          setNotificationMessage(null)
+        }, 5000)
       }
     }
     else {
@@ -56,6 +64,29 @@ const App = () => {
           setNewName('')
           setNewNumber('')
         })
+      setNotificationMessage(
+        `${personObject.name} was added to the phonebook.`
+      )
+      setTimeout(() => {
+        setNotificationMessage(null)
+      }, 5000)
+    }
+  }
+
+  const deletePerson = (id, name) => {
+    if(window.confirm("Delete " + name + "?")) {
+      personService
+        .exterminate(id)
+        .then(returnedPerson => {
+          setPersons(persons.filter(n => n.id !== id))
+      })
+
+    setNotificationMessage(
+      `${name} was deleted from the phonebook.`
+    )
+    setTimeout(() => {
+      setNotificationMessage(null)
+    }, 5000)
     }
   }
 
@@ -71,19 +102,11 @@ const App = () => {
     setSearchName(event.target.value)
   }
 
-  const deletePerson = (id, name) => {
-    if(window.confirm("Delete " + name + "?")) {
-      personService
-        .exterminate(id)
-        .then(returnedPerson => {
-          setPersons(persons.filter(n => n.id !== id))
-      })
-    }
-  }
-
   return (
     <div>
       <h2>Phonebook</h2>
+
+      <Notification message={notificationMessage} />
 
       <Filter searchName={searchName} handleNameSearch={handleNameSearch}/>
 
