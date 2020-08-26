@@ -20,6 +20,7 @@ const App = () => {
   const [ newNumber, setNewNumber ] = useState('')
   const [ searchName, setSearchName ] = useState('')
   const [ notificationMessage, setNotificationMessage ] = useState(null)
+  const [ isError, setIsError ] = useState(false)
 
   useEffect(() => {
     personService
@@ -42,6 +43,16 @@ const App = () => {
           .update(result.id, updatedPerson)
           .then(returnedPerson => {
             setPersons(persons.map(person => person.id !== result.id ? person : returnedPerson))
+          })
+          .catch(error => {
+            setNotificationMessage(
+              `${newName} was already deleted from server!`
+            )
+            setIsError(true)
+            setTimeout(() => {
+              setNotificationMessage(null)
+              setIsError(false)
+            }, 5000)
           })
         setNotificationMessage(
           `The number for ${updatedPerson.name} was updated.`
@@ -106,7 +117,7 @@ const App = () => {
     <div>
       <h2>Phonebook</h2>
 
-      <Notification message={notificationMessage} />
+      <Notification message={notificationMessage} isError={isError}/>
 
       <Filter searchName={searchName} handleNameSearch={handleNameSearch}/>
 
