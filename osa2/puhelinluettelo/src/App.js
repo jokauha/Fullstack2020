@@ -80,7 +80,7 @@ const App = () => {
         })
         .catch((error) => {
           setIsError(true)
-          setNotificationMessage('Give both a name and a number!')
+          setNotificationMessage(error.response.data.error)
         })
       setTimeout(() => {
         setNotificationMessage(null)
