@@ -74,12 +74,17 @@ const App = () => {
           setPersons(persons.concat(returnedPerson))
           setNewName('')
           setNewNumber('')
+          setNotificationMessage(
+            `${personObject.name} was added to the phonebook.`
+          )
         })
-      setNotificationMessage(
-        `${personObject.name} was added to the phonebook.`
-      )
+        .catch((error) => {
+          setIsError(true)
+          setNotificationMessage('Give both a name and a number!')
+        })
       setTimeout(() => {
         setNotificationMessage(null)
+        setIsError(false)
       }, 5000)
     }
   }
