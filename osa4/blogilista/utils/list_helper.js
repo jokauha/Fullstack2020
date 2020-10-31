@@ -4,6 +4,14 @@ const dummy = (blogs) => {
     }
 }
 
+const totalLikes = (blogs) => {
+    const likesArray = blogs.map( blog => blog.likes )
+    const reducer = (acc, cur) => acc + cur
+
+    return likesArray.reduce(reducer, 0)
+}
+
 module.exports = {
-    dummy
+    dummy,
+    totalLikes
 }
