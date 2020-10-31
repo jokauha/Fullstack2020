@@ -31,9 +31,25 @@ const mostBlogs = (blogs) => {
     return returnInfo
 }
 
+const mostLikes = (blogs) => {
+    const uniqueAuthors = lodash.uniqBy(blogs, 'author')
+    var likesByAuthor = []
+    uniqueAuthors.forEach(authorObject => {
+        const blogsOfAuthor = blogs.filter( blog => blog.author === authorObject.author)
+        const authorAndLikes = {
+            author: authorObject.author,
+            likes: lodash.sumBy(blogsOfAuthor, 'likes')
+        }
+        likesByAuthor.push(authorAndLikes)
+    })
+    const mostLikesAuthor = lodash.maxBy(likesByAuthor, 'likes')
+    return mostLikesAuthor
+}
+
 module.exports = {
     dummy,
     totalLikes,
     favoriteBlog,
-    mostBlogs
+    mostBlogs,
+    mostLikes
 }
