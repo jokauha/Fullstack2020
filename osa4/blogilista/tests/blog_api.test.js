@@ -30,6 +30,11 @@ test('a specific blog is within the returned blogs', async () => {
     expect(contents).toContain('React patterns')
 })
 
+test('the field id is actually called id', async () => {
+    const response = await api.get('/api/blogs')
+    expect(response.body[0].id).toBeDefined()
+})
+
 afterAll(() => {
     mongoose.connection.close()
 })
