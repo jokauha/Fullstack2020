@@ -4,6 +4,7 @@ const helper = require('./test_helper')
 const app = require('../app')
 const api = supertest(app)
 const Blog = require('../models/blog')
+const blogsRouter = require('../controllers/blogs')
 
 beforeEach(async () => {
     await Blog.deleteMany({})
@@ -71,6 +72,21 @@ test('if no likes are specified, the blog is to have 0 likes', async () => {
     const blogsAtEnd = await helper.blogsInDb()
     const addedNoLikesBlog = blogsAtEnd.find(blog => blog.title === blogWithNoLikes.title)
     expect(addedNoLikesBlog.likes).toBe(0)
+})
+
+test('blog without title and url is not added', async () => {
+    const newBlog = {
+        author: 'Jane Doe'
+    }
+
+    await api
+        .post('/api/blogs')
+        .send(newBlog)
+        .expect(400)
+
+    const blogsAtEnd = await helper.blogsInDb()
+
+    expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length)
 })
 
 afterAll(() => {
