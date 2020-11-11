@@ -245,7 +245,7 @@ describe('when there is initially one user at db', () => {
             .expect(400)
             .expect('Content-Type', /application\/json/)
 
-            expect(result.body.error).toContain('password required')
+        expect(result.body.error).toContain('password required')
 
         const usersAtEnd = await helper.usersInDb()
         expect(usersAtEnd).toHaveLength(usersAtStart.length)
@@ -266,7 +266,7 @@ describe('when there is initially one user at db', () => {
             .expect(400)
             .expect('Content-Type', /application\/json/)
 
-            expect(result.body.error).toContain('password must be at least')
+        expect(result.body.error).toContain('password must be at least')
 
         const usersAtEnd = await helper.usersInDb()
         expect(usersAtEnd).toHaveLength(usersAtStart.length)
