@@ -3,8 +3,8 @@ Content-Type: application/json
 Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im1sdXVra2FpIiwiaWQiOiI1ZmFhODIwYTIyNjE4YjdlMThjNGFmNzYiLCJpYXQiOjE2MDUxMjkxNzV9.vBG-JlSyyEF8GVbbFDIGdtQYIaPWdZGi44QX6lsfdws
 
 {
-    "title": "Autroisointi",
+    "title": "Autroisointi middlewarella",
     "author": "Esa Seppänen",
-    "url": "autorisointi.org",
-    "likes": 11
+    "url": "autorisointi2.org",
+    "likes": 19
 }
