@@ -12,6 +12,12 @@ describe('when there are initially some blogs saved', () => {
     beforeEach(async () => {
         await Blog.deleteMany({})
         await Blog.insertMany(helper.initialBlogs)
+        await User.deleteMany({})
+
+        const passwordHash = await bcrypt.hash('sekret', 10)
+        const user = new User({ username: 'root', passwordHash })
+
+        await user.save()
     })
 
     test('blogs are returned as json', async () => {
@@ -40,7 +46,7 @@ describe('when there are initially some blogs saved', () => {
     })
 
     describe('adding a new blog', () => {
-        test('a valid blog can be added', async () => {
+        test('a blog cannot be added without a valid token', async () => {
             const newBlog = {
                 title: 'Adding a new blog',
                 author: 'Nelson Mandela',
@@ -50,6 +56,26 @@ describe('when there are initially some blogs saved', () => {
 
             await api
                 .post('/api/blogs')
+                .send(newBlog)
+                .expect(401)
+                .expect('Content-Type', /application\/json/)
+
+            const blogsAtEnd = await helper.blogsInDb()
+            expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length)
+        })
+
+        test('a valid blog can be added', async () => {
+            const token = await helper.loginTestUser()
+            const newBlog = {
+                title: 'Adding a new blog',
+                author: 'Nelson Mandela',
+                url: 'http://www.google.cat',
+                likes: 5,
+            }
+
+            await api
+                .post('/api/blogs')
+                .set('Authorization', `bearer ${token}`)
                 .send(newBlog)
                 .expect(200)
                 .expect('Content-Type', /application\/json/)
@@ -61,6 +87,7 @@ describe('when there are initially some blogs saved', () => {
         })
 
         test('if no likes are specified, the blog is to have 0 likes', async () => {
+            const token = await helper.loginTestUser()
             const blogWithNoLikes = {
                 title: 'Nobody likes me',
                 author: 'Erkki Esimerkki',
@@ -69,6 +96,7 @@ describe('when there are initially some blogs saved', () => {
 
             await api
                 .post('/api/blogs')
+                .set('Authorization', `bearer ${token}`)
                 .send(blogWithNoLikes)
                 .expect(200)
                 .expect('Content-Type', /application\/json/)
@@ -79,12 +107,14 @@ describe('when there are initially some blogs saved', () => {
         })
 
         test('blog without title and url is not added', async () => {
+            const token = await helper.loginTestUser()
             const newBlog = {
                 author: 'Jane Doe'
             }
 
             await api
                 .post('/api/blogs')
+                .set('Authorization', `bearer ${token}`)
                 .send(newBlog)
                 .expect(400)
 
@@ -96,17 +126,33 @@ describe('when there are initially some blogs saved', () => {
 
     describe('deletion of a blog', () => {
         test('succeeds with status code 200 if id is valid', async () => {
-            const blogsAtStart = await helper.blogsInDb()
-            const blogToDelete = blogsAtStart[0]
+            const token = await helper.loginTestUser()
+            const newBlog = {
+                title: 'Adding a new blog',
+                author: 'Nelson Mandela',
+                url: 'http://www.google.cat',
+                likes: 5,
+            }
+
+            await api
+                .post('/api/blogs')
+                .set('Authorization', `bearer ${token}`)
+                .send(newBlog)
+                .expect(200)
+                .expect('Content-Type', /application\/json/)
+
+            const blogsBeforeDeletion = await Blog.find({})
+            const blogToDelete = await Blog.findOne({ 'title': 'Adding a new blog' })
 
             await api
                 .delete(`/api/blogs/${blogToDelete.id}`)
+                .set('Authorization', `bearer ${token}`)
                 .expect(204)
 
             const blogsAtEnd = await helper.blogsInDb()
 
             expect(blogsAtEnd).toHaveLength(
-                helper.initialBlogs.length - 1
+                blogsBeforeDeletion.length - 1
             )
 
             const contents = blogsAtEnd.map(r => r.title)
