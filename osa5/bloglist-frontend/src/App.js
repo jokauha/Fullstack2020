@@ -56,6 +56,30 @@ const App = () => {
     }
   }
 
+  const deleteBlog = async (id, title, author) => {
+    if(window.confirm('Remove blog ' + title + ' by ' + author)) {
+      try {
+        await blogService.exterminate(id)
+        setBlogs(blogs.filter(n => n.id !== id))
+        setNotificationMessage(
+          `${title} by ${author} was deleted succesfully`
+        )
+        setTimeout(() => {
+          setNotificationMessage(null)
+        }, 5000)
+      } catch (exception) {
+        setIsError(true)
+        setNotificationMessage(
+          `${title} by ${author} could not be deleted`
+        )
+        setTimeout(() => {
+          setNotificationMessage(null)
+          setIsError(false)
+        }, 5000)
+      }
+    }
+  }
+
   const handleLogin = async (event) => {
     event.preventDefault()
 
@@ -163,8 +187,15 @@ const App = () => {
           {blogs
             .sort((a, b) => (a.likes > b.likes ? -1 : 1))
             .map(blog =>
-            <Blog key={blog.id} blog={blog} likeBlog={() => addALike(blog.id)} />
-          )}
+              <Blog 
+                key={blog.id} 
+                blog={blog} 
+                likeBlog={() => addALike(blog.id)}
+                user={user}
+                removeBlog={() => deleteBlog(blog.id, blog.title, blog.author)}
+              />
+            )
+          }
         </div>
       </div>
     )

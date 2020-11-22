@@ -1,10 +1,18 @@
 import React, {useState} from 'react'
 
-const Blog = ({ blog, likeBlog }) => {
+const Blog = ({ blog, likeBlog, user, removeBlog }) => {
   const [fullInfo, setFullInfo] = useState(false)
+
+  let removable = false
+
+  if (blog.user.username === user.username) {
+    removable = true
+  }
 
   const hideFullInfo = { display: fullInfo ? 'none' : '' }
   const showFullInfo = { display: fullInfo ? '' : 'none' }
+
+  const showRemove = { display: removable ? '' : 'none' }
 
   const blogStyle = {
     paddingTop: 10,
@@ -33,6 +41,9 @@ const Blog = ({ blog, likeBlog }) => {
           <button onClick={likeBlog}>like</button>
         </p>
         <p>{blog.user.name}</p>
+        <div style={showRemove}>
+          <button onClick={removeBlog}>remove</button>
+        </div>
       </div>
     </div>
   )
