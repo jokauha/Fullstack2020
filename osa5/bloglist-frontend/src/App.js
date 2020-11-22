@@ -101,6 +101,25 @@ const App = () => {
     }, 5000)
   }
 
+  const addALike = async id => {
+    const blog = blogs.find(n => n.id === id)
+    const likedBlog = { ...blog, likes: blog.likes + 1 }
+
+    try {
+      const returnedBlog = await blogService.update(id, likedBlog)
+      setBlogs(blogs.map(blog => blog.id !== id ? blog : returnedBlog))
+    } catch (exception) {
+      setIsError(true)
+      setNotificationMessage(
+        `Blog '${blog.title}' could not be liked: ${exception}`
+      )
+      setTimeout(() => {
+        setNotificationMessage(null)
+        setIsError(false)
+      }, 5000)
+    }
+  }
+
   const blogForm = () => ( 
     <Togglable buttonLabel='new blog' ref={blogFormRef}>
         <BlogForm createBlog={addBlog} />
@@ -142,7 +161,7 @@ const App = () => {
         <br></br>
         <div>
           {blogs.map(blog =>
-            <Blog key={blog.id} blog={blog} />
+            <Blog key={blog.id} blog={blog} likeBlog={() => addALike(blog.id)} />
           )}
         </div>
       </div>

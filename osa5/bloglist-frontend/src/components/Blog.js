@@ -1,6 +1,6 @@
 import React, {useState} from 'react'
 
-const Blog = ({ blog }) => {
+const Blog = ({ blog, likeBlog }) => {
   const [fullInfo, setFullInfo] = useState(false)
 
   const hideFullInfo = { display: fullInfo ? 'none' : '' }
@@ -30,7 +30,7 @@ const Blog = ({ blog }) => {
         <p>{blog.url}</p>
         <p>
           likes {blog.likes}
-          <button>like</button>
+          <button onClick={likeBlog}>like</button>
         </p>
         <p>{blog.user.name}</p>
       </div>
