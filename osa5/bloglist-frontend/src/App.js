@@ -9,9 +9,6 @@ import loginService from './services/login'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
-  const [newTitle, setNewTitle] = useState('')
-  const [newAuthor, setNewAuthor] = useState('')
-  const [newUrl, setNewUrl] = useState('')
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
@@ -35,31 +32,19 @@ const App = () => {
     }
   }, [])
 
-  const addBlog = async (event) => {
-    event.preventDefault()
+  const addBlog = async (blogObject) => {
     blogFormRef.current.toggleVisibility()
-    const blogObject = {
-      title: newTitle,
-      author: newAuthor,
-      url: newUrl
-    }
 
     try {
       const returnedBlog = await blogService.create(blogObject)
       setBlogs(blogs.concat(returnedBlog))
-      setNewAuthor('')
-      setNewTitle('')
-      setNewUrl('')
       setNotificationMessage(
-        `a new blog ${newTitle} by ${newAuthor} added`
+        `a new blog ${returnedBlog.title} by ${returnedBlog.author} added`
       )
       setTimeout(() => {
         setNotificationMessage(null)
       }, 5000)
     } catch (exception) {
-      setNewAuthor('')
-      setNewTitle('')
-      setNewUrl('')
       setIsError(true)
       setNotificationMessage(
         `the new blog could not be added: ${exception}`
@@ -116,29 +101,9 @@ const App = () => {
     }, 5000)
   }
 
-  const handleAuthorChange = (event) => {
-    setNewAuthor(event.target.value)
-  }
-
-  const handleTitleChange = (event) => {
-    setNewTitle(event.target.value)
-  }
-
-  const handleUrlChange = (event) => {
-    setNewUrl(event.target.value)
-  }
-
   const blogForm = () => ( 
     <Togglable buttonLabel='new blog' ref={blogFormRef}>
-        <BlogForm
-          addBlog={addBlog}
-          newTitle={newTitle}
-          handleTitleChange={handleTitleChange}
-          newAuthor={newAuthor}
-          handleAuthorChange={handleAuthorChange}
-          newUrl={newUrl}
-          handleUrlChange={handleUrlChange}
-        />
+        <BlogForm createBlog={addBlog} />
     </Togglable>
   )
 
