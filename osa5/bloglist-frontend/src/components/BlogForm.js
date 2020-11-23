@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 
 const BlogForm = ({ createBlog }) => {
@@ -9,7 +9,7 @@ const BlogForm = ({ createBlog }) => {
     const handleAuthorChange = (event) => {
         setNewAuthor(event.target.value)
     }
-    
+
     const handleTitleChange = (event) => {
         setNewTitle(event.target.value)
     }
