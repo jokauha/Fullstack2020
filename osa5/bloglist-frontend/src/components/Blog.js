@@ -28,17 +28,17 @@ const Blog = ({ blog, likeBlog, user, removeBlog }) => {
     }
 
     return (
-        <div style={blogStyle}>
-            <div style={hideFullInfo}>
+        <div style={blogStyle} className='blog'>
+            <div style={hideFullInfo} className='basicInfo'>
                 {blog.title} {blog.author}
                 <button onClick={toggleFullInfo}>view</button>
             </div>
-            <div style={showFullInfo}>
+            <div style={showFullInfo} className='fullInfo'>
                 {blog.title} {blog.author}
                 <button onClick={toggleFullInfo}>hide</button>
                 <p>{blog.url}</p>
                 <p>
-          likes {blog.likes}
+                    likes {blog.likes}
                     <button onClick={likeBlog}>like</button>
                 </p>
                 <p>{blog.user.name}</p>
