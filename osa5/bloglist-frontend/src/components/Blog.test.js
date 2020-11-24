@@ -1,9 +1,12 @@
 import React from 'react'
 import '@testing-library/jest-dom/extend-expect'
-import { render } from '@testing-library/react'
+import { render, fireEvent } from '@testing-library/react'
 import Blog from './Blog'
 
-test('renders the blog title and author, but not url and likes', () => {
+
+describe('<Blog />', () => {
+    let component
+
     const blog = {
         title: 'The blog title is rendered by default',
         author: 'The author is included too',
@@ -20,32 +23,53 @@ test('renders the blog title and author, but not url and likes', () => {
         username: 'mockUser'
     }
 
-    const component = render(
-        <Blog
-            blog={blog}
-            likeBlog={mockLikeHandler}
-            user={mockUser}
-            removeBlog={mockRemoveHandler}
-        />
-    )
+    beforeEach(() => {
+        component = render(
+            <Blog
+                blog={blog}
+                likeBlog={mockLikeHandler}
+                user={mockUser}
+                removeBlog={mockRemoveHandler}
+            />
+        )
+    })
 
-    const basicInfo = component.container.querySelector('.basicInfo')
-    const fullInfo = component.container.querySelector('.fullInfo')
+    test('renders the blog title and author, but not url and likes', () => {
 
-    expect(basicInfo).not.toHaveStyle('display: none')
-    expect(basicInfo).toHaveTextContent(
-        'The blog title is rendered by default'
-    )
-    expect(basicInfo).toHaveTextContent(
-        'The author is included too'
-    )
-    expect(basicInfo).not.toHaveTextContent(
-        'noshowurl.org'
-    )
-    expect(basicInfo).not.toHaveTextContent(
-        'likes'
-    )
+        const basicInfo = component.container.querySelector('.basicInfo')
+        const fullInfo = component.container.querySelector('.fullInfo')
 
-    expect(fullInfo).toHaveStyle('display: none')
+        expect(basicInfo).not.toHaveStyle('display: none')
+        expect(basicInfo).toHaveTextContent(
+            'The blog title is rendered by default'
+        )
+        expect(basicInfo).toHaveTextContent(
+            'The author is included too'
+        )
+        expect(basicInfo).not.toHaveTextContent(
+            'noshowurl.org'
+        )
+        expect(basicInfo).not.toHaveTextContent(
+            'likes'
+        )
+
+        expect(fullInfo).toHaveStyle('display: none')
+
+    })
+
+    test('after clicking the button, url and likes are shown', () => {
+        const button = component.getByText('view')
+        fireEvent.click(button)
+
+        const fullInfo = component.container.querySelector('.fullInfo')
+
+        expect(fullInfo).not.toHaveStyle('display: none')
+        expect(fullInfo).toHaveTextContent(
+            'noshowurl.org'
+        )
+        expect(fullInfo).toHaveTextContent(
+            'likes'
+        )
+    })
 
 })
