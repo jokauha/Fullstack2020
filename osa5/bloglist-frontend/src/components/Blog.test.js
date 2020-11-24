@@ -72,4 +72,15 @@ describe('<Blog />', () => {
         )
     })
 
+    test('when the like button is clicked twice, the event handler is called twice', () => {
+        const viewButton = component.getByText('view')
+        fireEvent.click(viewButton)
+
+        const likeButton = component.getByText('like')
+        fireEvent.click(likeButton)
+        fireEvent.click(likeButton)
+
+        expect(mockLikeHandler.mock.calls).toHaveLength(2)
+    })
+
 })
