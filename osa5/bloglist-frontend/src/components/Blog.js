@@ -6,7 +6,7 @@ const Blog = ({ blog, likeBlog, user, removeBlog }) => {
 
     let removable = false
 
-    const addedBy = ''
+    let addedBy = ''
     if(blog.user) {
         if (blog.user.username === user.username) {
             removable = true
