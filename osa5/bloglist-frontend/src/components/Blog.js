@@ -6,8 +6,12 @@ const Blog = ({ blog, likeBlog, user, removeBlog }) => {
 
     let removable = false
 
-    if (blog.user.username === user.username) {
-        removable = true
+    const addedBy = ''
+    if(blog.user) {
+        if (blog.user.username === user.username) {
+            removable = true
+        }
+        addedBy = blog.user.name
     }
 
     const hideFullInfo = { display: fullInfo ? 'none' : '' }
@@ -41,7 +45,7 @@ const Blog = ({ blog, likeBlog, user, removeBlog }) => {
                     likes {blog.likes}
                     <button onClick={likeBlog}>like</button>
                 </p>
-                <p>{blog.user.name}</p>
+                <p>{addedBy}</p>
                 <div style={showRemove}>
                     <button onClick={removeBlog}>remove</button>
                 </div>
