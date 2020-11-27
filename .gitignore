@@ -2,3 +2,4 @@ Testit
 node_modules
 .env
 requests
+cypress/videos/
