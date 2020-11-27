@@ -183,7 +183,7 @@ const App = () => {
                     {blogForm()}
                 </div>
                 <br></br>
-                <div>
+                <div className='blogs'>
                     {blogs
                         .sort((a, b) => (a.likes > b.likes ? -1 : 1))
                         .map(blog =>
