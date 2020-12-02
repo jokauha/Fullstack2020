@@ -38,7 +38,7 @@ describe('Blog app', function() {
         })
     })
 
-    describe.only('When logged in', function() {
+    describe('When logged in', function() {
         beforeEach(function() {
             cy.login({ username: 'mluukkai', password: 'salainen' })
         })
@@ -56,8 +56,7 @@ describe('Blog app', function() {
 
         describe('and a blog exists', function() {
             beforeEach(function() {
-                cy.contains('new blog').click()
-                cy.createBlog({ title: 'Another blog by cypress', author: 'C. Y. Pres', url: 'cy.pr' })
+                cy.createBlog({ title: 'Another blog by cypress', author: 'C. Y. Pres', url: 'cy.pr', likes: 0 })
             })
 
             it('it can be liked', function() {
@@ -70,6 +69,23 @@ describe('Blog app', function() {
                 cy.contains('view').click()
                 cy.contains('remove').click()
                 cy.get('.blogs').should('not.contain', 'Another blog by cypress')
+            })
+        })
+
+        describe('and multiple blogs exist', function () {
+            beforeEach(function() {
+                cy.createBlog({ title: 'First blog', author: 'First Author', url: 'first.url', likes: 23 })
+                cy.createBlog({ title: 'Second blog', author: 'Second Author', url: 'second.url', likes: 56 })
+                cy.createBlog({ title: 'Third blog', author: 'Third Author', url: 'third.url', likes: 101 })
+            })
+
+            it('the blogs are ordered by their number of likes, the blog with the most likes first', function() {
+                cy.get('.viewButton').eq(0).click()
+                cy.get('.viewButton').eq(1).click()
+                cy.get('.viewButton').eq(2).click()
+                cy.get('.blog').eq(0).contains('likes 101')
+                cy.get('.blog').eq(1).contains('likes 56')
+                cy.get('.blog').eq(2).contains('likes 23')
             })
         })
     })
