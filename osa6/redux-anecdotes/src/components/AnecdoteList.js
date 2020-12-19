@@ -42,8 +42,7 @@ const mapDispatchToProps = {
     setNotification,
 }
 
-const ConnectedAnecdotes = connect(
+export default connect(
     mapStateToProps,
     mapDispatchToProps
 )(AnecdoteList)
-export default ConnectedAnecdotes
